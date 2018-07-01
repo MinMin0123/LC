@@ -1,1 +1,26 @@
+class Solution {
+public:
+    int numSquares(int n) {
+        vector<int> dp(n+1,0);
+        if(n<0)
+        return 0;
+        if(n==1)
+        return 1;
+        dp[1]=1;
+        for(int i =2;i<=n;i++){
+            if(i==int(sqrt(i))*int(sqrt(i))) {  
+                dp[i]=1;
+                continue;
+            }
+            for(int j = 1;j*j<=i;j++){
+                int x=dp[i-j*j]+dp[j*j];
+                if(dp[i]==0)
+                dp[i]=x;
+                else
+                dp[i]=min(x,dp[i]);
+            }
+        }
+        return dp[n];
+    }
 
+};
