@@ -1,0 +1,32 @@
+class Solution {
+public:
+    void unguarded_generate(vector<string> &result, string &curr, int m, int n)
+    {
+        // m,n分别表示未放置的'(',')'的数量
+        if(m==0 && n==0)
+        {
+            result.push_back(curr);
+            return;
+        }
+        if(m>0) // 任何情况m一定小于等于n
+        {
+            curr.push_back('(');
+            unguarded_generate(result, curr, m-1, n);
+            curr.pop_back();
+        }
+        if(m<n) // 此时可以放), n-1后仍满足m<=n
+        {
+            curr.push_back(')');
+            unguarded_generate(result, curr, m, n-1);
+            curr.pop_back();
+        }
+    }
+    
+    vector<string> generateParenthesis(int n) {
+        vector<string> result;
+        string curr;
+        curr.reserve(2*n);
+        unguarded_generate(result, curr, n, n);
+        return result;
+    }
+};
