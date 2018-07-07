@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<string> readBinaryWatch(int num) {
+        vector<string> times;
+
+        if (num < 0 || num > 8)
+            return times;
+
+        for (int i = 0; i < 0x2FF; i++) {
+            if (bitset<10>(i).count() == num)
+                add(i, times);
+        }
+
+        return times;
+    }
+
+    void add(int i, vector<string>& t) {
+        string s;
+        int m = i & 0x3F;
+        if (m > 59) 
+            return; 
+        int h = i >> 6 & 0xF; 
+        if (h > 11) 
+            return; 
+
+        t.push_back(to_string(h) + (m < 10? ":0" : ":") + to_string(m));  
+    }
+};
