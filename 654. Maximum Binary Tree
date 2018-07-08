@@ -1,0 +1,35 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+        vector<TreeNode*> root;
+        //初始化一个vector<TreeNode*> root模拟栈的行为，来存放遍历数组产生的当前节点。遍历数组，生成当前节点add。
+        //当栈root为空时，节点add直接入栈。进入下一循环：
+        for (int i = 0; i < nums.size(); i++) {
+            TreeNode* add = new TreeNode(nums[i]);
+            if (root.empty()) {
+            root.push_back(add);
+            }
+        //当栈不为空时，比较当前节点add与栈顶节点root.back()的val大小：
+        //如果root.back的val小于当前节点add，说明add的left可能指向root.back；将root.back弹出栈，比较下一个元素，直到栈为空或者栈顶元素的val大于add，则将root.back的右节点指向add；最后将当前节点add入栈
+            else {
+                    while (!root.empty() && root.back()->val < nums[i]) {
+                        add->left = root.back();
+                        root.pop_back();
+                    }
+            if (!root.empty()) root.back()->right = add;
+            root.push_back(add);
+            }
+        }
+        //经过上述步骤，最终树根节点会在栈低，用root.front()返回
+        return root.front();
+    }
+};
