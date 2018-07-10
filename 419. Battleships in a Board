@@ -1,0 +1,23 @@
+/**只找表示船头的元素个数
+船的最左边（水平方向）或是最上边（垂直方向）的元素就很特殊，
+因为它的左边（水平方向）或是上边（垂直方向）的元素会是’.’，而对于船中部的元素，它们的左边或是上边的元素肯定有一个会是’X’。 
+利用这点，我们可以遍历矩阵每一个元素，当符合是船头元素时，就增加船的个数，否则继续遍历下一个元素，最后返回找到的船的个数即可。
+**/
+class Solution {
+public:
+    int countBattleships(vector<vector<char>>& board) {
+        if (board.empty())
+            return 0;
+
+        int rsize = board.size();//行大小
+        int csize = board[0].size();//列大小
+        int count = 0;
+
+        for (int i = 0; i < rsize; i++)
+            for (int j = 0; j < csize; j++)
+                if (board[i][j] == 'X' && (i == 0 || board[i - 1][j] == '.') && (j == 0 || board[i][j - 1] == '.'))
+                    count++;
+
+        return count;
+    }
+};
