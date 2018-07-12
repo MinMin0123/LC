@@ -1,0 +1,40 @@
+//先把起点加到队列中, 然后每次将字典中与队首距离为1的字符串加进队列, 直到最后出队列的是终点字符串, 为确保终点字符串存在, 我们可以先在字典中加进去终点字符串.而在本题中在寻找与一个字符串相距为1的的字典中另一个字符串时如果一个个遍历字典消耗时间比较多, 每次时间复杂度是O(n). 在单个字符串不是很长的情况下, 一个个查看改变一个字符然后在字典中查看是否存在效率要更高些, 其时间复杂度是O(k log n), 其中k为单个字符串长度, n为字典长度.
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        unordered_set<string> fresh(wordList.begin(), wordList.end());
+        if(fresh.find(endWord) == fresh.end()){
+            return 0;
+        }
+
+        int steps = 1, wlength = wordList[0].size();
+        queue<string> current;
+        current.push(beginWord);
+
+        while(!fresh.empty() && !current.empty()){
+            current.push("#");
+            steps++;
+            while(current.front() != "#"){
+                string word = current.front();
+                for(int i = 0; i < wlength; i++){
+                    char c = word[i];
+                    for(int j = 0; j < 26; j++){
+                        word[i] = 'a' + j;
+                        if(fresh.find(word) != fresh.end()){
+                            if(word == endWord){
+                                return steps;
+                            }
+                            fresh.erase(word);
+                            current.push(word);
+                        }
+                    }
+                    word[i] = c;
+                }
+                current.pop();
+            }
+            current.pop();
+        }
+        return 0;
+
+    }
+};
