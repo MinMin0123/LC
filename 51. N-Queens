@@ -1,0 +1,70 @@
+/*1.定义一个check函数用来判断[row,col]这个位置是否能够防止一枚皇后Q，即检测横竖，对角线左右是否有皇后。
+
+2.从0行0列开始往下递归放置Q，如果位置合适，则放置一枚Q，并继续向下一行进行递归防止。直到行数与我们要求解的N皇后数相等（即row==n）
+
+3.回溯！这里必须要注意，如果递归到row+1行时，循环试了从第0列到第col列的所有位置都无法放置，那么当前无解，必须将上一次放置的皇后取消掉。
+*/
+class Solution {
+
+private:
+	vector<vector<string>>result;
+	bool check(int row,int col, int n,vector<string>m)//检测每行，每列，左右两个斜行
+	{
+		if (row == 0)
+			return true;
+		int i;
+		int j;
+		for (i = 0; i < row; i++)
+		{
+			if (m[i][col] == 'Q')
+				return false;
+		}
+		i = row - 1;
+		j = col - 1;
+		while (i >= 0 && j >= 0)
+		{
+			if (m[i][j] == 'Q')
+				return false;
+			i--;
+			j--;
+		}
+		i = row - 1;
+		j = col + 1;
+		while (i >= 0 && j < n)
+		{
+			if (m[i][j] == 'Q')
+				return false;
+			i--;
+			j++;
+		}
+		return true;
+	}
+	void add(vector<string>m)
+	{
+		result.push_back(m);
+	}
+	void solve(int row,int n,vector<string>m)
+	{
+		int col;
+		if (row == n )//所有行已经全部放置
+		{
+			add(m);
+			return;
+		}
+		for (col = 0; col<n; col++)
+		{
+			if (check(row, col,n,m) == true)//查看row行col列
+			{
+					m[row][col] = 'Q';//放置一枚Q
+					solve(row + 1,n,m);//往下行继续递归放置
+					m[row][col] = '.';//如果没有达到递归到返回条件，将之前放置的Q取消
+			}
+		}
+    }
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<string>m(n,string(n,'.'));//Init
+		solve(0, n,m);
+		return result;
+    }
+};
