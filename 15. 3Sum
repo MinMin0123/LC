@@ -1,0 +1,59 @@
+/*
+先升序排序，然后用第一重for循环确定第一个数字。
+
+然后在第二重循环里，第二、第三个数字分别从两端往中间扫。
+
+如果三个数的sum等于0，得到一组解。
+
+如果三个数的sum小于0，说明需要增大，所以第二个数往右移。
+
+如果三个数的sum大于0，说明需要减小，所以第三个数往左移。
+
+时间复杂度：O(n2)
+*/
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int> > ret;
+        int len = nums.size();
+        sort(nums.begin(), nums.end());
+        for(int i = 0; i < len; i ++){
+            //skip same i
+            while(i > 0 && i < len && nums[i] == nums[i-1])
+                i ++;
+            int j = i + 1;
+            int k = len - 1;
+            while(j < k){
+                int sum = nums[i] + nums[j] + nums[k];
+                if(sum == 0){
+                    vector<int> cur(3);
+                    cur[0] = nums[i];
+                    cur[1] = nums[j];
+                    cur[2] = nums[k];
+                    ret.push_back(cur);
+                    j ++;
+                    k --;
+                    //skip same j
+                    while(j < k && nums[j] == nums[j-1])
+                        j ++;
+                    //skip same k
+                    while(k > j && nums[k] == nums[k+1])
+                        k --;
+                }
+                else if(sum < 0){
+                    j ++;
+                    //skip same j
+                    while(j < k && nums[j] == nums[j-1])
+                        j ++;
+                }
+                else{
+                    k --;
+                    //skip same k
+                    while(k > j && nums[k] == nums[k+1])
+                        k --;
+                }
+            }
+        }
+        return ret;
+    }
+};
