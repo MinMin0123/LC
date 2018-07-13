@@ -1,0 +1,65 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+1、对于每一层递归，只有包含此层树根节点的值才可以返回到上层。否则路径将不连续。
+
+2、返回的值最多为根节点加上左右子树中的一个返回值，而不能加上两个返回值。否则路径将分叉。
+
+在这两个前提下有个需要注意的问题，最上层返回的值并不一定是满足要求的最大值，
+
+因为最大值对应的路径不一定包含root的值，可能存在于某个子树上。
+
+因此解决方案为设置全局变量maxSum，在递归过程中不断更新最大值。
+ */
+class Solution {
+public:
+    int maxSum;
+    Solution()
+    {
+        maxSum = INT_MIN;
+    }
+    
+    int maxPathSum(TreeNode* root) {
+        Helper(root);
+        return maxSum;
+    }
+    
+    int Helper(TreeNode *root) {
+        if(!root)
+            return INT_MIN;
+        else
+        {
+            int left = Helper(root->left);
+            int right = Helper(root->right);
+            if(root->val >= 0)
+            {//allways include root
+                if(left >= 0 && right >= 0)
+                    maxSum = max(maxSum, root->val+left+right);
+                else if(left >= 0 && right < 0)
+                    maxSum = max(maxSum, root->val+left);
+                else if(left < 0 && right >= 0)
+                    maxSum = max(maxSum, root->val+right);
+                else
+                    maxSum = max(maxSum, root->val);
+            }
+            else
+            {
+                if(left >= 0 && right >= 0)
+                    maxSum = max(maxSum, max(root->val+left+right, max(left, right)));
+                else if(left >= 0 && right < 0)
+                    maxSum = max(maxSum, left);
+                else if(left < 0 && right >= 0)
+                    maxSum = max(maxSum, right);
+                else
+                    maxSum = max(maxSum, max(root->val, max(left, right)));
+            }
+            //return only one path, do not add left and right at the same time
+            return max(root->val+max(0, left), root->val+max(0, right));
+        }
+    }
+};
