@@ -1,0 +1,47 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ 分为两个步骤，第一步是找到m结点所在位置，第二步就是进行反转直到n结点。
+ 反转的方法就是每读到一个结点，把它插入到m结点前面位置，然后m结点接到读到结点的下一个。总共只需要一次扫描，所以时间是O(n)，只需要几个辅助指针，空间是O(1)。
+ https://blog.csdn.net/feliciafay/article/details/18828065
+ */
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        if (head == NULL)
+            return NULL;
+            
+        ListNode *q = NULL;
+        ListNode *p = head;
+        for(int i = 0; i < m - 1; i++)
+        {
+            q = p;
+            p = p->next;
+        }
+        
+        ListNode *end = p;
+        ListNode *pPre = p;
+        p = p->next;
+        for(int i = m + 1; i <= n; i++)
+        {
+            ListNode *pNext = p->next;
+            
+            p->next = pPre;
+            pPre = p;
+            p = pNext;
+        }
+        
+        end->next = p;
+        if (q)
+            q->next = pPre;
+        else
+            head = pPre;
+        
+        return head;
+
+    }
+};
