@@ -1,0 +1,24 @@
+//采用两个hash表记录，一个记录个数，另一个记录是否被访问。遍历源string，记录hash表中对应char项减一，若被访问了说明，已经在结果中处于正确位置，若没有被访问过，则检查结果string的最后一个char是不是大于当前char，且个数记录表中不为0（说明，还存在这样的char在当前char的后面），则循环检查结果string的最后一个单词，直到满足规定。结果string 初始化时候为“0”。
+class Solution {
+public:
+    string removeDuplicateLetters(string s) {
+        string res="0";
+        int m1[256]={0};
+        int visited[256]={0}; 
+        for(auto p:s) m1[p]++;
+        for(auto p:s)
+        {
+            
+            --m1[p];
+            if(visited[p]) continue;
+            while(m1[res.back()]&&p<res.back())
+            {
+                visited[res.back()]=0;
+                res.pop_back();
+            }
+            visited[p]=1;
+            res+=p;
+        }
+        return res.substr(1);
+    }
+};
