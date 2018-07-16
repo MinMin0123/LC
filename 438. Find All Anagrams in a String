@@ -1,0 +1,26 @@
+//首先就要统计字符串p中字符出现的次数，然后从s的开头开始，每次找p字符串长度个字符，来验证字符个数是否相同，如果不相同出现了直接break，如果一直都相同了，则将起始位置加入结果res中
+//https://www.cnblogs.com/grandyang/p/6014408.html
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        if (s.empty()) return {};
+        vector<int> res, cnt(128, 0);
+        int ns = s.size(), np = p.size(), i = 0;
+        for (char c : p) ++cnt[c];
+        while (i < ns) {
+            bool success = true;
+            vector<int> tmp = cnt;
+            for (int j = i; j < i + np; ++j) {
+                if (--tmp[s[j]] < 0) {
+                    success = false;
+                    break;
+                }
+            }
+            if (success) {
+                res.push_back(i); 
+            }
+            ++i;
+        }
+        return res;
+    }
+};
