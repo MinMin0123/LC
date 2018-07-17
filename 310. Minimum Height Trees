@@ -1,0 +1,28 @@
+//https://www.jianshu.com/p/ce7f035daf74
+class Solution {
+public:
+    vector<int> findMinHeightTrees(int n, vector<pair<int, int>>& edges) {
+        vector<int> indegree(n,0), ans;
+        for(auto val: edges) indegree[val.first]++, indegree[val.second]++;
+        unordered_map<int, set<int>> hash;
+        for(auto val: edges)
+        {
+            hash[val.first].insert(val.second);
+            hash[val.second].insert(val.first);
+        }
+        while(n > 2)
+        {
+            vector<int> vec;
+            for(int i =0; i < indegree.size(); i++) 
+                if(indegree[i]==1) vec.push_back(i);
+            for(auto k: vec)
+            {
+                indegree[k] = -1, n--;
+                for(auto val: hash[k]) indegree[val]--;
+            }
+        }
+        for(int i = 0; i < indegree.size(); i++)
+            if(indegree[i] >= 0) ans.push_back(i);
+        return ans;
+    }
+};
