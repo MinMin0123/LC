@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int firstUniqChar(string s) {
+        vector<int>count(26);
+        for (int i = 0; i < (int)s.size(); i++)
+        {
+            count[s[i] - 'a'] ++;//字频统计
+        }
+        for (int i = 0; i < (int)s.size(); i++)
+        {
+            if (count[s[i] - 'a'] == 1)//找出第一个不重复
+                return i;
+        }
+        return -1;
+    }
+};
