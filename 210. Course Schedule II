@@ -1,0 +1,53 @@
+class Solution {
+public:
+    /** 
+     * 完成所有的课程的顺序
+     * bfs拓扑排序
+     * @param numCourses 课程数量
+     * @param prerequisites 课程先序关系
+     * @return 能完成返回课程顺序,否则返回空
+     https://blog.csdn.net/smile_watermelon/article/details/47663819
+     */
+    vector<int> findOrder(int numCourses, vector<pair<int, int>>& prerequisites) {
+        vector<int> heads(numCourses, -1), degree(numCourses, 0), points, args;
+        pair<int, int> p;
+        int from, to, count = 0, len = prerequisites.size();
+
+        /* 构造有向图,邻接表 */
+        for (int i = 0; i < len; ++i) {
+            p = prerequisites[i];
+            from = p.second;
+            to = p.first;
+            ++degree[to];
+            args.push_back(heads[from]);
+            points.push_back(to);
+            heads[from] = count++;
+        }   
+
+        /* bfs拓扑排序,依次移除入度为0的点 */
+        vector<int> ret;
+        queue<int> q;
+        for (int i = 0; i < numCourses; ++i) 
+            if (degree[i] == 0) q.push(i);
+        while (!q.empty()) {
+            from = q.front();
+            ret.push_back(from); // 课程完成，添加到结果集中
+            q.pop();
+            to = heads[from];
+            while (to != -1) {
+                if(--degree[points[to]] == 0) q.push(points[to]);
+                to = args[to];
+            }   
+        }   
+
+        /* 判定是否所有的点入度都为0,若是则不存在环,否则存在环 */
+        for (int i = 0; i < numCourses; ++i)
+            if (degree[i] > 0) {
+                ret.clear();
+                break;
+            }   
+
+        return ret;
+    }   
+
+};
