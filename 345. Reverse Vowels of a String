@@ -1,0 +1,29 @@
+//find more
+class Solution {
+private:
+    void chrSwap(char &a, char &b){//交换
+        char tmp = a;
+        a = b;
+        b = tmp;
+    }
+    bool judgeVowels(vector<char> Vowels, char c){//判断字符是否是元音
+        return (find(Vowels.begin(), Vowels.end(), tolower(c))!=Vowels.end());
+    }
+public:
+    string reverseVowels(string s) {
+        vector<char>Vowels = {'a','e','i','o','u'};//元音集合
+        vector<int>vowelsIndex;
+        for (int i = 0; i < s.size(); i++){
+            if (judgeVowels(Vowels, s[i])){
+                vowelsIndex.push_back(i);
+            }
+        }//生成元音字符索引集合
+        int left=0;
+        int right = vowelsIndex.size() - 1;
+        while (left < right){
+            //对集合中相应位置的字符进行操作
+            chrSwap(s[vowelsIndex[left++]], s[vowelsIndex[right--]]);
+        }
+        return s;
+    }
+};
