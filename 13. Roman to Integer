@@ -1,0 +1,31 @@
+//https://blog.csdn.net/x_shuck/article/details/50831943
+class Solution {
+public:
+    int romanToInt(string s) {
+        int index = s.size();
+		if (index < 1)
+			return 0;
+		map<char, int> m;
+		m['I'] = 1;
+		m['V'] = 5;
+		m['X'] = 10;
+		m['L'] = 50;
+		m['C'] = 100;
+		m['D'] = 500;
+		m['M'] = 1000;
+ 
+		index--;
+		int sum = m[s[index]];
+		while (index){
+			index--;
+			if (m[s[index + 1]] > m[s[index]]){
+				sum -= m[s[index]];
+			}
+			else{
+				sum += m[s[index]];
+			}
+		}
+		return sum;
+
+    }
+};
