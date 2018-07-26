@@ -1,0 +1,27 @@
+class Solution {
+public:
+    string crackSafe(int n, int k) {
+               string result(n, '0');
+        string curr(n - 1, '0');
+        unordered_set<string> visited;
+        visited.insert(result);
+        for (;;) {
+            bool done = true;
+            for (int i = k - 1; i >= 0; --i) {
+                char c = '0' + i;
+                string s = curr + c;
+                if (visited.find(s) == visited.end()) {
+                    curr = s.substr(1);
+                    visited.insert(std::move(s));
+                    done = false;
+                    result += c;
+                    break;
+                }
+            }
+            if (done) {
+                break;
+            }
+        }
+        return result;
+    }
+};
