@@ -1,0 +1,24 @@
+class Solution {
+public:
+    bool judgeCircle(string moves) {
+        int x=0, y=0;
+        int len = moves.size();
+        if(len <= 1){
+            return false;
+        }
+        int i;
+        for(i=0;i<len;++i){
+            switch(moves[i]){
+            case 'U': y++; break;
+            case 'D': y--; break;
+            case 'L': x--; break;
+            case 'R': x++; break;
+            }
+        }//for
+        if(x==0 && y==0){
+            return true;
+        }
+        return false;
+
+    }
+};
