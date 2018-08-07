@@ -1,0 +1,13 @@
+//https://blog.csdn.net/sinat_36053757/article/details/70211996
+class Solution {
+public:
+    int singleNonDuplicate(vector<int>& nums) {
+        int len=nums.size();//计算nums的长度
+        for(int i=0;i<len-2;i+=2){//从0索引开始遍历，到倒数第三个数，步长为2
+            if(nums[i]!=nums[i+1]){//如果当前这个数与之后那个数不相等
+                return nums[i];//返回当前数，否则索引加2
+            }
+        }
+        return nums[len-1];//如果循环完没有返回，那么单一值一定是最后一个
+    }
+};
