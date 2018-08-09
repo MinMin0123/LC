@@ -1,0 +1,40 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ https://blog.csdn.net/sunao2002002/article/details/45876793
+ */
+
+class Solution {
+public:
+TreeNode * helper(vector<int>& preorder, vector<int>::iterator begin1, vector<int>::iterator end1,
+		vector<int>& inorder, vector<int>::iterator begin2, vector<int>::iterator end2){
+		if (begin1>=end1 || begin2>=end2)
+			return 0;
+		//取前序遍历的第一个节点构建根节点
+		int value = *begin1;
+		TreeNode *pNode = new TreeNode(value);
+		
+		//在中序遍历中，根左边的为左子树节点的中序遍历，右边为右子树节点的中序遍历
+		vector<int>::iterator it = find(begin2, end2, value);
+		int leftLength = it - begin2;
+		
+		//在前序遍历中，除第一个元素，及根外，前leftLength个节点为左子树的前序遍历，然后是右子树的前序遍历
+		
+		//通过左子树的前序、中序遍历递归构建左子树
+		pNode->left = helper(preorder, begin1+1, begin1+leftLength+1,
+							 inorder, begin2, it);
+		//通过右子树的前序、中序遍历递归构建右子树					 
+		pNode->right = helper(preorder, begin1+leftLength+1, end1,
+							  inorder, it+1, end2);
+		return pNode;
+	}
+	
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        return helper(preorder, preorder.begin(), preorder.end(), inorder, inorder.begin(), inorder.end());
+    }
+};
