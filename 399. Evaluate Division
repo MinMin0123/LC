@@ -1,0 +1,45 @@
+//https://blog.csdn.net/gcs6564157/article/details/52740366
+class Solution {
+private:
+    map<string, string> father;
+public:
+    vector<double> calcEquation(vector<pair<string, string>> equations, vector<double>& values, vector<pair<string, string>> queries) {
+        map<string, double> mp;
+        vector<double> ans;
+        int len = equations.size();
+        for(int i = 0; i < len; ++i) {
+            if(mp.count(equations[i].first) == 0 && mp.count(equations[i].second) == 0) {
+                mp[equations[i].second] = 1;
+                mp[equations[i].first] = values[i];
+                father[equations[i].first] = equations[i].first;
+                father[equations[i].second] = equations[i].first;
+            }else if(mp.count(equations[i].first) == 0) {
+                mp[equations[i].first] = values[i] * mp[equations[i].second];
+                father[equations[i].first] = equations[i].second;
+            }else if(mp.count(equations[i].second) == 0) {
+                mp[equations[i].second] = mp[equations[i].first] / values[i];
+                father[equations[i].second] = equations[i].first;
+            }else unionFather(equations[i].first, equations[i].second, values[i], mp);
+        }
+        len = queries.size();
+        for(int i = 0; i < len; ++i) {
+            if(mp.count(queries[i].first) == 0 || mp.count(queries[i].second) == 0 || findFather(queries[i].first) != findFather(queries[i].second)) ans.push_back(-1);
+            else ans.push_back(mp[queries[i].first] / mp[queries[i].second]);
+        }
+        return ans;
+    }
+    string findFather(string s) {
+        while(father[s] != s) s = father[s];
+        return s;
+    }
+    void unionFather(string s1, string s2, double r, map<string, double>& mp) {
+        string f1 = findFather(s1), f2 = findFather(s2);
+        double ra = mp[s2] * r / mp[s1];
+        for(auto it = mp.begin(); it != mp.end(); ++it) {
+            if(findFather(it->first) == f1) {
+                mp[it->first] *= ra;
+            }
+        }
+        father[f2] = f1;
+    }
+};
