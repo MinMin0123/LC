@@ -1,0 +1,25 @@
+//https://blog.csdn.net/wangyaninglm/article/details/47380453
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        set<int> result;
+        
+        set<int>::iterator itor ;
+ 
+    for(int i = 0;i< nums.size();++i)
+    {
+        itor = result.find(nums[i]) ;
+ 
+        if(itor != result.end()) 
+        {
+            return true;
+        }
+        else
+        {
+            result.insert(nums[i]);
+        }
+    }
+        return false;
+
+    }
+};
