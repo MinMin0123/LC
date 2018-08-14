@@ -1,0 +1,26 @@
+//https://www.cnblogs.com/pk28/p/7469097.html
+//learn more
+class Solution {
+public:
+    int maximumSwap(int num) {
+        vector<int> v;
+        set<int> s;
+        s.insert(num);
+        while (num) {
+            v.push_back(num%10);
+            num /= 10;
+        }
+        for (int i = 0; i < v.size(); i++) {
+            for (int j = i+1; j < v.size(); j++) {
+                swap(v[i], v[j]);
+                int tmp = 0;
+                for (int k = v.size()-1; k >= 0; k--) {
+                    tmp = tmp*10+v[k];
+                }
+                s.insert(tmp);
+                swap(v[i], v[j]);
+            }
+        }
+        return *s.rbegin();
+    }
+};
