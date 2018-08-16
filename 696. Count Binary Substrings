@@ -1,0 +1,31 @@
+//https://blog.csdn.net/u013055770/article/details/78777014
+//find
+class Solution {
+public:
+    int countBinarySubstrings(string s) {
+        int size = s.size();
+        if(size==0) return 0;
+        char now=s[0];
+        int l = 1;
+        int ll = 0;
+        int sum=0;
+
+        for(int i=1;i<size;i++){
+            if(s[i]==now){
+                if(ll!=0){
+                    sum += (l>ll? ll:l);
+                    now = s[i-1];
+                    l=ll;
+                    ll=1;
+                    continue;
+                }
+                l++;
+            }
+            else{
+                ll++;
+            }
+        }
+        sum += (l>ll? ll:l);
+        return sum;
+    }
+};
