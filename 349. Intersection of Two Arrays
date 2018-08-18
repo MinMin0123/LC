@@ -1,0 +1,31 @@
+//https://blog.csdn.net/yzhang6_10/article/details/51526059
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+          // 对数组1进行排序 
+            sort(nums1.begin(), nums1.end());
+            // 对数组2进行排序
+            sort(nums2.begin(), nums2.end());
+            vector<int> result;
+            int mark;
+            // 对排序后的数组1与数组2进行比较，输出最终的交集结果 
+           for (int i = 0, j = 0; i < nums1.size() && j < nums2.size(); )
+            {
+                if (nums1[i] < nums2[j])
+                    i++;
+                else if (nums1[i] > nums2[j])
+                    j++;
+                else if (nums1[i] == nums2[j])
+                {
+                    if (result.size() == 0 || nums1[i] != mark)
+                    {
+                        result.push_back(nums1[i]);
+                        mark = nums1[i];
+                    }
+                    i++;
+                    j++;
+                }
+            } 
+            return result;
+    }
+};
