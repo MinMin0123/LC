@@ -1,0 +1,22 @@
+//https://blog.csdn.net/lichen_yun/article/details/77990499
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+    int n = nums.size();
+    if (n == 0) return 0;
+    int sum = nums[0];
+    int greatestSum = sum;
+    for (int i = 1; i < n; ++i) {
+        if (sum > 0) {
+            sum += nums[i];
+        } else {
+            sum = nums[i];
+        }
+        // need to save the greatest sum because when sum > 0 you may add some negative number and make it smaller
+        if (sum > greatestSum) {
+            greatestSum = sum;
+        } 
+    }
+    return greatestSum; 
+    }
+};
