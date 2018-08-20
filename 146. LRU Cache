@@ -1,0 +1,48 @@
+//https://www.cnblogs.com/gxhblog/p/6596662.html
+class LRUCache {
+public:
+    LRUCache(int capacity):_capacity(capacity) {
+        
+    }
+    
+    int get(int key) {
+        auto it = cache.find(key);
+        if (it == cache.end())
+            return -1;
+        touch(it);
+        return it->second.first;
+    }
+    
+    void put(int key, int value) {
+        auto it = cache.find(key);
+        if (it != cache.end())
+            touch(it);
+        else {
+            if (cache.size() == _capacity) {
+                cache.erase(keys.back());
+                keys.pop_back();
+            }
+            keys.push_front(key);
+        }
+        cache[key] = {value, keys.begin()};
+    }
+private:
+    using PII = pair<int, list<int>::iterator>;
+    
+    void touch(unordered_map<int, PII>::iterator it) {
+        keys.erase(it->second.second);
+        keys.push_front(it->first);
+        it->second.second = keys.begin();
+    }
+    
+    list<int> keys;
+    unordered_map<int, PII> cache;
+    int _capacity;
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
