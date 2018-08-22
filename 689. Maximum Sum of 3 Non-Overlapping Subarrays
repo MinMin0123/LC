@@ -1,0 +1,47 @@
+//zhegebuxing
+class Solution {
+public:
+    vector<int> maxSumOfThreeSubarrays(vector<int>& nums, int k) {
+        int l = nums.size() - k + 1;
+        
+        int sums[20000];
+        for (int i = 0; i < l; ++i) sums[i] = 0;
+        for (int i = 0; i < l; ++i)
+        	for (int j = 0; j < k; ++j)
+        		sums[i] += nums[i + j];
+ 
+        int dp[3][20000];
+        for (int i = 0; i < 3; ++i)
+        	for (int j = 0; j < l; ++j)
+        		dp[i][j] = 0;
+ 
+        // dp[i][j] = maximun sum of previous j sums of number i
+        // 0
+        dp[0][0] = sums[0];
+    	for (int i = 1; i < l; ++i) dp[0][i] = max(dp[0][i - 1], sums[i]);
+    	// 1
+    	dp[1][k] = sums[0] + sums[k];
+        for (int i = 1 + k; i < l; ++i) dp[1][i] = max(dp[1][i - 1], sums[i] + dp[0][i - k]);
+    	// 2
+    	dp[2][k + k] = sums[0] + sums[k] + sums[k + k];
+        for (int i = 1 + k + k; i < l; ++i) dp[2][i] = max(dp[2][i - 1], sums[i] + dp[1][i - k]);
+ 
+        vector<int> result(3);
+    	int max, pos;
+    	int limit = l;
+    	for (int i = 2; i >= 0; --i) {
+    		max = pos = 0;
+	    	for (int j = 0; j < limit; ++j) {
+	    		if (max < dp[i][j]) {
+	    			max = dp[i][j];
+	    			pos = j;
+	    		}
+	    	}
+	    	result[i] = pos;
+	    	limit = pos - k + 1;
+    	}
+ 
+        return result;
+
+    }
+};
