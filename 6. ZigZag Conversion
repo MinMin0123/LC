@@ -1,0 +1,23 @@
+class Solution {
+public:
+    string convert(string s, int numRows) {
+       if(numRows==1) return s;
+        string rel="";
+        int l=s.length();
+        int add=2*numRows-2;
+        for(int i=0;i<numRows;i++){
+            for(int j=i;j<l;j+=add){
+                rel+=s[j];
+                int flag=j+2*(numRows-1-i);
+                if(i!=0&&i!=numRows-1&&flag<l){
+                    rel+=s[flag];
+                }
+            }
+        }
+        return rel;
+
+
+//https://www.jianshu.com/p/76f6e555f248
+
+    }
+};
