@@ -1,0 +1,56 @@
+//https://www.cnblogs.com/93scarlett/p/6361052.html
+//no good
+class LFUCache {
+public:
+    LFUCache(int capacity) {
+        size = 0;
+        cap = capacity;
+    }
+    
+    int get(int key) {
+        if(m.count(key) == 0) return -1;//not exist
+        fm[m[key].second].erase(mIter[key]);//erase the current object
+        m[key].second++;//update the freqence
+        fm[m[key].second].push_back(key);//add the GET object
+        mIter[key] = -- fm[m[key].second].end();//记录最后一个点 在相同的freq
+        
+        if(fm[minFreq].size() == 0) minFreq++;//如果当前minFreq对应fm的list size是0 的话(因为后来get操作使其freq加一)所在的freq队列为空，则最小的freq要++
+        return m[key].first;//return value
+    }
+    
+    void put(int key, int value) {
+        if(cap <= 0) return;//capacity <= 0 end
+        int val = get(key);
+        if(val != -1){//如果存在，则update value 
+            m[key].first = value;
+            return;
+        }
+        
+        if(size >= cap){
+            m.erase(fm[minFreq].front());//m中去掉最老最久的点
+            mIter.erase(fm[minFreq].front());//mIter中去除
+            fm[minFreq].pop_front();//fm中去除
+            size--;
+        }
+        
+        m[key] = {value, 1};
+        fm[1].push_back(key);
+        mIter[key] = --fm[1].end();
+        minFreq = 1;
+        size++;
+    }
+private:
+    int size;
+    int cap;
+    unordered_map<int, pair<int, int>> m; //key to pair(value, frequence)
+    unordered_map<int, list<int>::iterator> mIter;//key to list iterator to record the last node in the same frequence 为了erase最后一个，freq最小最老的
+    unordered_map<int, list<int>> fm;//freq to list of key
+    int minFreq;
+};
+
+/**
+ * Your LFUCache object will be instantiated and called as such:
+ * LFUCache obj = new LFUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
